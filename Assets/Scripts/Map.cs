@@ -7,7 +7,7 @@ public class Map : MonoBehaviour
     private static Map _instance;
     public static Map Instance {  get { return _instance; } }
     //variables for creating the grid
-    public GameObject overlay;
+    public OverlayTile overlay;
     public GameObject overlayContainer;
 
     //singleton code
@@ -28,17 +28,16 @@ public class Map : MonoBehaviour
     {
         var tilemap = gameObject.GetComponentInChildren<Tilemap>();
         BoundsInt bounds = tilemap.cellBounds;
-        for(int z = bounds.max.z; z > bounds.min.z; z--)
+        for(int z = bounds.min.z; z < bounds.max.z; z++)
         {
             for (int y = bounds.min.y; y < bounds.max.y; y++)
             {
                 for(int x = bounds.min.x; x < bounds.max.x; x++)
                 {
                     var tileLocation = new Vector3Int(x, y, z);
-                    Debug.Log(tilemap.HasTile(tileLocation));
+                    Debug.Log(tileLocation);
                     if (tilemap.HasTile(tileLocation))
                     {
-                        Debug.Log(tileLocation.ToString());
                         var overlayTile = Instantiate(overlay, overlayContainer.transform);
                         var cellWorldPosition = tilemap.GetCellCenterWorld(tileLocation);
 
