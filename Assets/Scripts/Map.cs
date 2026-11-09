@@ -39,7 +39,6 @@ public class Map : MonoBehaviour
                 {
                     var tileLocation = new Vector3Int(x, y, z);
                     var tileKey = new Vector2Int(x, y);
-                    Debug.Log(tileLocation);
                     if (tilemap.HasTile(tileLocation) && !map.ContainsKey(tileKey))
                     {
                         var overlayTile = Instantiate(overlay, overlayContainer.transform);
