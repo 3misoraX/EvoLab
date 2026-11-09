@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class UnitMovement : MonoBehaviour
 {
+    public OverlayTile activeTile;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

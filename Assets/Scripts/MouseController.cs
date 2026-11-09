@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class MouseController : MonoBehaviour
 {
+    public GameObject unitPrefab;
+    public UnitMovement unit;
     // Update is called once per frame
     void LateUpdate()
     {
@@ -18,6 +20,12 @@ public class MouseController : MonoBehaviour
             if(Mouse.current.leftButton.ReadValue() > 0)
             {
                 overlay.GetComponent<OverlayTile>().Show();
+
+                if(unit == null)
+                {
+                    unit = Instantiate(unitPrefab).GetComponent<UnitMovement>();
+                    PositionUnit(overlay.GetComponent<OverlayTile>());
+                }
             }
         }
 
@@ -35,5 +43,12 @@ public class MouseController : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void PositionUnit(OverlayTile tile)
+    {
+        unit.transform.position = tile.transform.position;
+        unit.gameObject.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder+1;
+        unit.activeTile = tile;
     }
 }
