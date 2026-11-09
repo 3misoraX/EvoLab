@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,6 +10,7 @@ public class Map : MonoBehaviour
     //variables for creating the grid
     public OverlayTile overlay;
     public GameObject overlayContainer;
+    public Dictionary<Vector2Int, OverlayTile> map;
 
     //singleton code
     void Awake()
@@ -27,6 +29,7 @@ public class Map : MonoBehaviour
     void Start()
     {
         var tilemap = gameObject.GetComponentInChildren<Tilemap>();
+        map = new Dictionary<Vector2Int, OverlayTile>();
         BoundsInt bounds = tilemap.cellBounds;
         for(int z = bounds.min.z; z < bounds.max.z; z++)
         {
@@ -35,14 +38,16 @@ public class Map : MonoBehaviour
                 for(int x = bounds.min.x; x < bounds.max.x; x++)
                 {
                     var tileLocation = new Vector3Int(x, y, z);
+                    var tileKey = new Vector2Int(x, y);
                     Debug.Log(tileLocation);
-                    if (tilemap.HasTile(tileLocation))
+                    if (tilemap.HasTile(tileLocation) && !map.ContainsKey(tileKey))
                     {
                         var overlayTile = Instantiate(overlay, overlayContainer.transform);
                         var cellWorldPosition = tilemap.GetCellCenterWorld(tileLocation);
 
                         overlayTile.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z+1);
-                        overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tilemap.GetComponent<TilemapRenderer>().sortingOrder;
+                        overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tilemap.GetComponent<TilemapRenderer>().sortingOrder+1;
+                        map.Add(tileKey, overlayTile);
                     }
                 }
             }

@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 666134904684700971, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -151,3 +151,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ee29afb954b724791ebcbeb91302d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OverlayTile
+  player: {fileID: -944628639613478452, guid: 174f892701628aa47b7ee9fcbfb976cc, type: 3}
