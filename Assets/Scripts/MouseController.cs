@@ -1,11 +1,26 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class MouseController : MonoBehaviour
 {
+    public float speed = 2;
+
     public GameObject unitPrefab;
     public UnitMovement unit;
+
+    private PathFinding pathFinder;
+    public List<OverlayTile> path = new List<OverlayTile>();
+
+    void Start()
+    {
+        if(pathFinder == null)
+        {
+            pathFinder = new PathFinding();
+        }
+    }
+
     // Update is called once per frame
     void LateUpdate()
     {
@@ -26,9 +41,33 @@ public class MouseController : MonoBehaviour
                     unit = Instantiate(unitPrefab).GetComponent<UnitMovement>();
                     PositionUnit(overlay.GetComponent<OverlayTile>());
                 }
+                else
+                {
+                    path = pathFinder.Path(unit.activeTile, overlay.GetComponent<OverlayTile>());
+                }
             }
         }
 
+        if(path.Count > 0)
+        {
+            MoveUnit();
+        }
+
+    }
+
+    public void MoveUnit()
+    {
+        var step = speed * Time.deltaTime;
+        var zIndex = path[0].transform.position.z;
+
+        unit.transform.position = Vector2.MoveTowards(unit.transform.position, path[0].transform.position, step);
+        unit.transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, zIndex);
+
+        if(Vector2.Distance(unit.transform.position, path[0].transform.position) < 0.0001f)
+        {
+            PositionUnit(path[0]);
+            path.RemoveAt(0);
+        }
     }
 
     public RaycastHit2D? GetFocusTile()
