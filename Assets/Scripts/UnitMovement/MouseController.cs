@@ -8,17 +8,14 @@ public class MouseController : MonoBehaviour
     public float speed = 2;
 
     public GameObject unitPrefab;
-    public UnitMovement unit;
+    private UnitMovement unit;
 
     private PathFinding pathFinder;
     public List<OverlayTile> path = new List<OverlayTile>();
 
     void Start()
     {
-        if(pathFinder == null)
-        {
-            pathFinder = new PathFinding();
-        }
+        pathFinder = new PathFinding();
     }
 
     // Update is called once per frame

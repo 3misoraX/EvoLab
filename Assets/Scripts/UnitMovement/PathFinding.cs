@@ -21,6 +21,7 @@ public class PathFinding
 
             if(current == end)
             {
+                Debug.Log("Lista creada");
                 return GetFinishedList(start, end);
             }
             //get neighboring tiles
