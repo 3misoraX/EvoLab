@@ -6,16 +6,20 @@ using System.Collections.Generic;
 public class MouseController : MonoBehaviour
 {
     public float speed = 2;
+    public int range = 3;
 
     public GameObject unitPrefab;
     private UnitMovement unit;
 
     private PathFinding pathFinder;
+    private RangeFinder rangeFinder;
     public List<OverlayTile> path = new List<OverlayTile>();
+    public List<OverlayTile> inRange = new List<OverlayTile>();
 
     void Start()
     {
         pathFinder = new PathFinding();
+        rangeFinder = new RangeFinder();
     }
 
     // Update is called once per frame
@@ -37,6 +41,7 @@ public class MouseController : MonoBehaviour
                 {
                     unit = Instantiate(unitPrefab).GetComponent<UnitMovement>();
                     PositionUnit(overlay.GetComponent<OverlayTile>());
+                    GetTilesInRange();
                 }
                 else
                 {
@@ -86,5 +91,21 @@ public class MouseController : MonoBehaviour
         unit.transform.position = tile.transform.position;
         unit.gameObject.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder+1;
         unit.activeTile = tile;
+    }
+
+    private void GetTilesInRange()
+    {
+        foreach (var tile in inRange)
+        {
+            tile.Hide();
+        }
+
+        inRange = rangeFinder.GetTilesInRange(unit.activeTile, range);
+
+        foreach(var tile in inRange)
+        {
+            tile.Show();
+            tile.StartCoroutine(tile.ShowRange());
+        }
     }
 }

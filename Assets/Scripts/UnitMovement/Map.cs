@@ -53,4 +53,40 @@ public class Map : MonoBehaviour
             }
         }
     }
+
+    public List<OverlayTile> GetNeighbors(OverlayTile tile)
+    {
+        List<OverlayTile> neighborTiles = new List<OverlayTile>();
+        //bottom
+        //Creates a list with neighboring tiles from current one
+        Vector2Int locationToCheck = new Vector2Int(tile.location.x, tile.location.y - 1);
+
+        if (map.ContainsKey(locationToCheck))
+        {
+            neighborTiles.Add(map[locationToCheck]);
+        }
+        //top
+        locationToCheck = new Vector2Int(tile.location.x, tile.location.y + 1);
+
+        if (map.ContainsKey(locationToCheck))
+        {
+            neighborTiles.Add(map[locationToCheck]);
+        }
+        //left
+        locationToCheck = new Vector2Int(tile.location.x - 1, tile.location.y);
+
+        if (map.ContainsKey(locationToCheck))
+        {
+            neighborTiles.Add(map[locationToCheck]);
+        }
+        //right
+        locationToCheck = new Vector2Int(tile.location.x + 1, tile.location.y);
+
+        if (map.ContainsKey(locationToCheck))
+        {
+            neighborTiles.Add(map[locationToCheck]);
+        }
+
+        return neighborTiles;
+    }
 }

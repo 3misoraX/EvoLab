@@ -19,7 +19,7 @@ public class RangeFinder
             var surrounding = new List<OverlayTile>();
             foreach(var tile in previousTile)
             {
-                surrounding.AddRange(new PathFinding().GetNeighbors(tile));
+                surrounding.AddRange(Map.Instance.GetNeighbors(tile));
             }
 
             inRangeTiles.AddRange(surrounding);

@@ -25,7 +25,7 @@ public class PathFinding
                 return GetFinishedList(start, end);
             }
             //get neighboring tiles
-            var neighbor = GetNeighbors(current);
+            var neighbor = Map.Instance.GetNeighbors(current);
             
             foreach(var n in neighbor)
             {
@@ -69,43 +69,5 @@ public class PathFinding
     public int GetManhattanDistance(OverlayTile start, OverlayTile end)
     {
         return Mathf.Abs(start.location.x - end.location.x) + Mathf.Abs(start.location.y - end.location.y);
-    }
-    
-    public List<OverlayTile> GetNeighbors(OverlayTile tile) 
-    {
-        var map = Map.Instance.map;
-
-        List<OverlayTile> neighborTiles = new List<OverlayTile>();
-        //bottom
-        //Creates a list with neighboring tiles from current one
-        Vector2Int locationToCheck = new Vector2Int(tile.location.x, tile.location.y-1);
-
-        if(map.ContainsKey(locationToCheck))
-        {
-            neighborTiles.Add(map[locationToCheck]);
-        }
-        //top
-        locationToCheck = new Vector2Int(tile.location.x, tile.location.y+1);
-
-        if(map.ContainsKey(locationToCheck))
-        {
-            neighborTiles.Add(map[locationToCheck]);
-        }
-        //left
-        locationToCheck = new Vector2Int(tile.location.x-1, tile.location.y);
-
-        if(map.ContainsKey(locationToCheck))
-        {
-            neighborTiles.Add(map[locationToCheck]);
-        }
-        //right
-        locationToCheck = new Vector2Int(tile.location.x+1, tile.location.y);
-
-        if(map.ContainsKey(locationToCheck))
-        {
-            neighborTiles.Add(map[locationToCheck]);
-        }
-
-        return neighborTiles;
     }
 }
