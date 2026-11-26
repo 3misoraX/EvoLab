@@ -2,6 +2,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using static Arrows;
+using UnityEngine.Tilemaps;
 
 public class MouseController : MonoBehaviour
 {
@@ -9,17 +11,22 @@ public class MouseController : MonoBehaviour
     public int range = 3;
 
     public GameObject unitPrefab;
+    [SerializeField]
     private UnitMovement unit;
 
     private PathFinding pathFinder;
     private RangeFinder rangeFinder;
+    private Arrows translator;
     public List<OverlayTile> path = new List<OverlayTile>();
     public List<OverlayTile> inRange = new List<OverlayTile>();
+    [SerializeField]
+    private bool moving = false;
 
     void Start()
     {
         pathFinder = new PathFinding();
         rangeFinder = new RangeFinder();
+        translator = new Arrows();
     }
 
     // Update is called once per frame
@@ -33,24 +40,47 @@ public class MouseController : MonoBehaviour
             transform.position = overlay.transform.position;
             gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlay.GetComponent<SpriteRenderer>().sortingOrder;
 
-            if(Mouse.current.leftButton.ReadValue() > 0)
+            if (inRange.Contains(overlay.GetComponent<OverlayTile>()) && !moving)
             {
-                overlay.GetComponent<OverlayTile>().Show();
+                path = pathFinder.Path(unit.activeTile, overlay.GetComponent<OverlayTile>());
 
+                foreach(var tile in inRange)
+                {
+                    tile.DisplayArrow(ArrowDirection.None);
+                }
+
+                for(int i = 0; i < path.Count; i++)
+                {
+                    var previous = i > 0 ? path[i - 1] : unit.activeTile;
+                    var next = i < path.Count - 1 ? path[i + 1] : null;
+                    ArrowDirection dir = translator.Translate(path[i], previous, next);
+                    path[i].DisplayArrow(dir);
+                }
+            }
+
+            if(Mouse.current.leftButton.wasPressedThisFrame)
+            {
                 if(unit == null)
                 {
-                    unit = Instantiate(unitPrefab).GetComponent<UnitMovement>();
+                    try
+                    {
+                        unit = GameObject.FindWithTag("Unit").GetComponent<UnitMovement>();
+                    }
+                    catch
+                    {
+                        unit = Instantiate(unitPrefab).GetComponent<UnitMovement>();
+                    }
                     PositionUnit(overlay.GetComponent<OverlayTile>());
                     GetTilesInRange();
                 }
-                else
+                else if(unit != null && overlay.GetComponent<OverlayTile>().blocked == false)
                 {
-                    path = pathFinder.Path(unit.activeTile, overlay.GetComponent<OverlayTile>());
+                    moving = true;
                 }
             }
         }
 
-        if(path.Count > 0)
+        if(path.Count > 0 && moving)
         {
             MoveUnit();
         }
@@ -69,6 +99,12 @@ public class MouseController : MonoBehaviour
         {
             PositionUnit(path[0]);
             path.RemoveAt(0);
+        }
+
+        if(path.Count == 0)
+        {
+            GetTilesInRange();
+            moving = false;
         }
     }
 
@@ -98,6 +134,7 @@ public class MouseController : MonoBehaviour
         foreach (var tile in inRange)
         {
             tile.Hide();
+            tile.blocked = true;
         }
 
         inRange = rangeFinder.GetTilesInRange(unit.activeTile, range);
@@ -105,7 +142,7 @@ public class MouseController : MonoBehaviour
         foreach(var tile in inRange)
         {
             tile.Show();
-            tile.StartCoroutine(tile.ShowRange());
+            tile.blocked = false;
         }
     }
 }

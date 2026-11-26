@@ -1,6 +1,9 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Arrows;
 
 public class OverlayTile : MonoBehaviour
 {
@@ -10,30 +13,36 @@ public class OverlayTile : MonoBehaviour
     public bool blocked = false;
     public OverlayTile previous;
     public Vector3Int location;
-    private bool range = false;
+    public Vector2Int location2D { get { return new Vector2Int(location.x, location.y); } }
+    [SerializeField]
+    private SpriteRenderer arrow;
+    [SerializeField]
+    private SpriteRenderer tile;
 
-    void Update()
-    {
-        if(Mouse.current.leftButton.ReadValue() > 0 && !range)
-        {
-            Hide();
-        }
-    }
+    public List<Sprite> arrows;
 
     public void Show()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        tile.color = new Color(1, 1, 1, 1);
     }
 
     public void Hide()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        tile.color = new Color(1, 1, 1, 0);
+        DisplayArrow(ArrowDirection.None);
     }
 
-    public IEnumerator ShowRange()
+    public void DisplayArrow(ArrowDirection d)
     {
-        range = true;
-        yield return new WaitForSeconds(0.1f);
-        range = false;
+        if(d == ArrowDirection.None)
+        {
+            arrow.color = new Color(1, 1, 1, 0);
+        }
+        else
+        {
+            arrow.color = new Color(1, 1, 1, 1);
+            arrow.sprite = arrows[(int)d];
+            arrow.sortingOrder = GetComponent<SpriteRenderer>().sortingOrder+1;
+        }
     }
 }
