@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1970763297
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6416789122189490246, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1970763297
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 666134904684700971, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
@@ -258,7 +258,7 @@ MonoBehaviour:
   - {fileID: 6296137254373669167, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
   - {fileID: -1400832232712754758, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
   - {fileID: -7195449788458874145, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
-  - {fileID: -6457282284672588498, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
-  - {fileID: -185618232069188130, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
-  - {fileID: -2994928844648702356, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
   - {fileID: -1530432162528392, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
+  - {fileID: -2994928844648702356, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
+  - {fileID: -185618232069188130, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
+  - {fileID: -6457282284672588498, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}

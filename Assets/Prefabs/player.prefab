@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5675737706669586469}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.497, y: 0.489, z: 0}
+  m_LocalPosition: {x: -0.497, y: 0.489, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1312267009
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8266258911003420344, guid: 75d68cb581f0b4f41883bd3a2fe328fd, type: 3}
@@ -152,3 +152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitMovement
   activeTile: {fileID: 0}
+  maxHp: 0
+  atk: 0
+  def: 0
+  lvl: 1
+  form: {fileID: 11400000, guid: 2648c26dd988b684c84a14ae1b6ca63d, type: 2}

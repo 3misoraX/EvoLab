@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using static Arrows;
 using UnityEngine.Tilemaps;
+using Unity.VisualScripting;
 
 public class MouseController : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class MouseController : MonoBehaviour
     public GameObject unitPrefab;
     [SerializeField]
     private UnitMovement unit;
+    [SerializeField]
+    private List<GameObject> activeUnits = new List<GameObject>();
 
     private PathFinding pathFinder;
     private RangeFinder rangeFinder;
@@ -27,6 +30,7 @@ public class MouseController : MonoBehaviour
         pathFinder = new PathFinding();
         rangeFinder = new RangeFinder();
         translator = new Arrows();
+        activeUnits.AddRange(GameObject.FindGameObjectsWithTag("Unit"));
     }
 
     // Update is called once per frame
@@ -40,7 +44,7 @@ public class MouseController : MonoBehaviour
             transform.position = overlay.transform.position;
             gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlay.GetComponent<SpriteRenderer>().sortingOrder;
 
-            if (inRange.Contains(overlay.GetComponent<OverlayTile>()) && !moving)
+            if (inRange.Contains(overlay.GetComponent<OverlayTile>()) && !moving && unit != null)
             {
                 path = pathFinder.Path(unit.activeTile, overlay.GetComponent<OverlayTile>());
 
@@ -60,21 +64,25 @@ public class MouseController : MonoBehaviour
 
             if(Mouse.current.leftButton.wasPressedThisFrame)
             {
-                if(unit == null)
+                if (unit == null && focusTile.Value.collider.gameObject.tag == "Unit")
                 {
-                    try
+                    unit = focusTile.Value.collider.gameObject.TryGetComponent<UnitMovement>(out UnitMovement u)? u : null;
+                    if(unit != null)
                     {
-                        unit = GameObject.FindWithTag("Unit").GetComponent<UnitMovement>();
+                        unit.transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, 0);
+                        focusTile = GetFocusTile();
+                        overlay = focusTile.Value.collider.gameObject;
+                        PositionUnit(overlay.GetComponent<OverlayTile>());
+                        GetTilesInRange();
                     }
-                    catch
-                    {
-                        unit = Instantiate(unitPrefab).GetComponent<UnitMovement>();
-                    }
-                    PositionUnit(overlay.GetComponent<OverlayTile>());
-                    GetTilesInRange();
                 }
                 else if(unit != null && overlay.GetComponent<OverlayTile>().blocked == false)
                 {
+                    foreach (var tile in inRange)
+                    {
+                        tile.Hide();
+                        tile.blocked = true;
+                    }
                     moving = true;
                 }
             }
@@ -103,8 +111,10 @@ public class MouseController : MonoBehaviour
 
         if(path.Count == 0)
         {
-            GetTilesInRange();
             moving = false;
+            unit.transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, 2);
+            unit = null;
+
         }
     }
 
@@ -131,12 +141,6 @@ public class MouseController : MonoBehaviour
 
     private void GetTilesInRange()
     {
-        foreach (var tile in inRange)
-        {
-            tile.Hide();
-            tile.blocked = true;
-        }
-
         inRange = rangeFinder.GetTilesInRange(unit.activeTile, range);
 
         foreach(var tile in inRange)

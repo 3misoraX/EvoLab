@@ -11,6 +11,8 @@ public class Map : MonoBehaviour
     public OverlayTile overlay;
     public GameObject overlayContainer;
     public Dictionary<Vector2Int, OverlayTile> map;
+    private Tilemap tilemap;
+    private Tilemap obstacles;
 
     //singleton code
     void Awake()
@@ -28,7 +30,16 @@ public class Map : MonoBehaviour
     // looping through all the tiles
     void Start()
     {
-        var tilemap = gameObject.GetComponentInChildren<Tilemap>();
+        for(int i = 0; i < gameObject.transform.childCount; i++){
+            if(gameObject.transform.GetChild(i).name == "Ground")
+            {
+                tilemap = gameObject.transform.GetChild(i).GetComponent<Tilemap>();
+            }
+            else if(gameObject.transform.GetChild(i).name == "Obstacles")
+            {
+                obstacles = gameObject.transform.GetChild(i).GetComponent<Tilemap>();
+            }
+        }
         map = new Dictionary<Vector2Int, OverlayTile>();
         BoundsInt bounds = tilemap.cellBounds;
         for(int z = bounds.min.z; z < bounds.max.z; z++)
@@ -39,7 +50,7 @@ public class Map : MonoBehaviour
                 {
                     var tileLocation = new Vector3Int(x, y, z);
                     var tileKey = new Vector2Int(x, y);
-                    if (tilemap.HasTile(tileLocation) && !map.ContainsKey(tileKey))
+                    if (tilemap.HasTile(tileLocation) && !map.ContainsKey(tileKey) && !obstacles.HasTile(tileLocation))
                     {
                         var overlayTile = Instantiate(overlay, overlayContainer.transform);
                         var cellWorldPosition = tilemap.GetCellCenterWorld(tileLocation);

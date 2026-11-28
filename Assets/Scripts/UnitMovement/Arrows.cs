@@ -38,19 +38,47 @@ public class Arrows
         }
         else if(direction == new Vector2Int(1, 1))
         {
-            return ArrowDirection.TurnUpRight;
+            if(previousDirection == new Vector2Int(0, 1))
+            {
+                return ArrowDirection.TurnUpRight;
+            }
+            else
+            {
+                return ArrowDirection.TurnDownLeft;
+            }
         }
         else if(direction == new Vector2Int(-1, 1))
         {
-            return ArrowDirection.TurnUpLeft;
+            if(previousDirection == new Vector2Int(0, 1))
+            {
+                return ArrowDirection.TurnUpLeft;
+            }
+            else
+            {
+                return ArrowDirection.TurnDownRight;
+            }
         }
         else if(direction == new Vector2Int(1, -1))
         {
-            return ArrowDirection.TurnDownRight;
+            if(previousDirection == new Vector2Int(0, -1))
+            {
+                return ArrowDirection.TurnDownRight;
+            }
+            else
+            {
+                return ArrowDirection.TurnUpLeft;
+            }
         }
         else if(direction == new Vector2Int(-1, -1))
         {
-            return ArrowDirection.TurnDownLeft;
+            if(previousDirection == new Vector2Int(0, -1))
+            {
+                return ArrowDirection.TurnDownLeft;
+            }
+            else
+            {
+                return ArrowDirection.TurnUpRight;
+            }
         }
         else if(direction == new Vector2Int(1, 0) && isFinal)
         {
